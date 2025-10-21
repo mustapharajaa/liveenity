@@ -8,6 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import { createClient } from "@libsql/client";
+import { promises as fsPromises } from 'fs';
 
 // 2. SETUP
 const __filename = fileURLToPath(import.meta.url);
@@ -55,7 +56,6 @@ if (dbUrl && dbAuthToken) {
 
 // --- 3. MIDDLEWARE ---
 // (CORS and JSON parsing already set up above)
-app.use(express.static('public'));
 
 // --- 4. API ENDPOINTS ---
 
@@ -203,6 +203,178 @@ const servePages = async (req, res, next) => {
 
 // Handle both /pages and /pages/:slug with the same handler
 app.get(['/pages', '/pages/:slug'], servePages);
+
+// Keywords route
+app.get('/keywords', async (req, res) => {
+    try {
+        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
+        let keywords = [];
+        
+        try {
+            const data = await fsPromises.readFile(keywordsPath, 'utf8');
+            keywords = data.split('\n').filter(k => k.trim() !== '');
+        } catch (err) {
+            console.error('Error reading keywords file:', err);
+            // Continue with empty keywords array if file doesn't exist yet
+        }
+        
+        res.send(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Manage Keywords</title>
+                <style>
+                    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+                    h1 { color: #333; }
+                    textarea { width: 100%; height: 200px; margin: 10px 0; padding: 10px; }
+                    button { padding: 8px 16px; background: #0070f3; color: white; border: none; border-radius: 4px; cursor: pointer; }
+                    button:hover { background: #005bb5; }
+                    .container { margin-top: 20px; }
+                </style>
+            </head>
+            <body>
+                <h1>Manage Keywords</h1>
+                <form action="/keywords" method="POST">
+                    <p>Enter one keyword per line:</p>
+                    <textarea name="keywords" placeholder="Enter keywords, one per line">${keywords.join('\n')}</textarea>
+                    <div>
+                        <button type="submit">Save Keywords</button>
+                    </div>
+                </form>
+                <div class="container">
+                    <h3>Current Keywords (${keywords.length}):</h3>
+                    <ul>${keywords.map(k => `<li>${k}</li>`).join('')}</ul>
+                </div>
+            </body>
+            </html>
+        `);
+    } catch (error) {
+        console.error('Error in /keywords route:', error);
+        res.status(500).send('Error loading keywords');
+    }
+});
+
+app.post('/keywords', express.urlencoded({ extended: true }), async (req, res) => {
+    try {
+        const keywords = req.body.keywords;
+        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
+        
+        // Create directory if it doesn't exist
+        await fsPromises.mkdir(path.dirname(keywordsPath), { recursive: true });
+        
+        // Save the keywords
+        await fsPromises.writeFile(keywordsPath, keywords, 'utf8');
+        
+        res.redirect('/keywords?success=1');
+    } catch (error) {
+        console.error('Error saving keywords:', error);
+        res.status(500).send('Error saving keywords');
+    }
+});
+
+// API to trigger Python script
+app.post('/api/run-keyword-search', express.json(), (req, res) => {
+    const { keyword } = req.body;
+    
+    if (!keyword) {
+        return res.status(400).json({ error: 'Keyword is required' });
+    }
+
+    const { spawn } = require('child_process');
+    const pythonProcess = spawn('python', [
+        path.join(__dirname, 'SCRAP', 'keyword_searcher.py'),
+        '--keyword',
+        keyword
+    ]);
+
+    let output = '';
+    let errorOutput = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (data) => {
+        errorOutput += data.toString();
+    });
+
+    pythonProcess.on('close', (code) => {
+        if (code !== 0) {
+            console.error(`Python script exited with code ${code}`);
+            console.error('Error output:', errorOutput);
+            return res.status(500).json({
+                error: 'Error running script',
+                details: errorOutput
+            });
+        }
+        
+        res.json({
+            success: true,
+            output: output,
+            message: 'Script executed successfully'
+        });
+    });
+});
+
+// API Endpoints for Keywords
+app.get('/api/keywords', async (req, res) => {
+    try {
+        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
+        let keywords = [];
+        
+        try {
+            const data = await fsPromises.readFile(keywordsPath, 'utf8');
+            keywords = data.split('\n')
+                         .map(k => k.trim())
+                         .filter(k => k !== '');
+        } catch (err) {
+            if (err.code !== 'ENOENT') {
+                console.error('Error reading keywords file:', err);
+                return res.status(500).json({ error: 'Error reading keywords file' });
+            }
+            // If file doesn't exist, return empty array
+        }
+        
+        res.json({ keywords });
+    } catch (error) {
+        console.error('Error in /api/keywords:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/api/keywords', express.json(), async (req, res) => {
+    try {
+        const { keywords } = req.body;
+        
+        if (!Array.isArray(keywords)) {
+            return res.status(400).json({ error: 'Keywords must be an array' });
+        }
+        
+        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
+        const keywordsDir = path.dirname(keywordsPath);
+        
+        // Create directory if it doesn't exist
+        try {
+            await fsPromises.mkdir(keywordsDir, { recursive: true });
+        } catch (err) {
+            console.error('Error creating directory:', err);
+            return res.status(500).json({ error: 'Error creating directory' });
+        }
+        
+        // Save the keywords, one per line
+        await fsPromises.writeFile(keywordsPath, keywords.join('\n'), 'utf8');
+        
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error saving keywords:', error);
+        res.status(500).json({ error: 'Error saving keywords' });
+    }
+});
+
+// Serve keywords.html
+app.get('/keywords', (req, res) => {
+    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'));
+});
 
 // Serve sitemap.xml
 app.get('/sitemap.xml', (req, res) => {

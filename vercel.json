@@ -1,17 +1,38 @@
 {
   "version": 2,
   "builds": [
-    { "src": "server.js", "use": "@vercel/node" },
-    { "src": "public/**/*", "use": "@vercel/static" },
-    { "src": "*.{html,css,js,json}", "use": "@vercel/static" }
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.{html,css,js,json}",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
-    { "src": "/api/.*", "dest": "server.js" },
-    { "src": "/pages/?(.*)", "dest": "server.js" },
-    { "src": "/(.*)", "dest": "/index.html" },
-    { "src": "/(.*)", "status": 200, "headers": { "Cache-Control": "public, max-age=0, must-revalidate" } }
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/pages(/?.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
+    }
   ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

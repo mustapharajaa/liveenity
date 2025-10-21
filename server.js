@@ -1,44 +1,60 @@
 // server.js
 
 // 1. MODULE IMPORTS (ESM Syntax)
-// Use 'dotenv/config' to automatically load environment variables from .env
-import 'dotenv/config'; 
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import { createClient } from "@libsql/client";
 
+// 2. SETUP
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-import { createClient } from "@libsql/client";
+const isVercel = process.env.VERCEL === '1';
 
 // --- 2. CONFIGURATION & INITIALIZATION ---
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Configure CORS for all routes
+app.use(cors());
+
+// Parse JSON and URL-encoded data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    // Set proper cache headers for static assets
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  }
+}));
 
 // Get connection details from environment variables
 const dbUrl = process.env.TURSO_DATABASE_URL;
 const dbAuthToken = process.env.TURSO_AUTH_TOKEN;
 
 // Initialize the libSQL client
-if (!dbUrl || !dbAuthToken) {
-    console.error("FATAL ERROR: TURSO_DATABASE_URL or TURSO_AUTH_TOKEN is missing in environment variables.");
-    process.exit(1); // Exit if essential variables are missing
+let db;
+if (dbUrl && dbAuthToken) {
+  db = createClient({
+    url: dbUrl,
+    authToken: dbAuthToken
+  });
+  console.log('Turso database client initialized');
+} else {
+  console.warn('Turso database configuration not found. Some features may not work.');
 }
 
-const db = createClient({
-    url: dbUrl,
-    authToken: dbAuthToken,
-});
-
-console.log("Turso client initialized successfully.");
-
 // --- 3. MIDDLEWARE ---
-app.use(cors());
-app.use(express.json());
-
-// Serve static files from the 'public' directory
+// (CORS and JSON parsing already set up above)
 app.use(express.static('public'));
 
 // --- 4. API ENDPOINTS ---
@@ -217,9 +233,16 @@ app.get('*', (req, res) => {
 });
 
 // --- 7. START SERVER ---
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log("API endpoints:");
-    console.log(`- GET  /api/test - Test database connection`);
-    console.log(`- GET  /api/search?query=your_search_term - Search posts`);
-});
+if (!isVercel) {
+    // Start the server only if not running on Vercel
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+        console.log("API endpoints:");
+        console.log(`- GET  /api/test - Test database connection`);
+        console.log(`- GET  /api/search?query=your_search_term - Search posts`);
+    });
+}
+
+// Export the Express app for Vercel
+// This allows Vercel to use the app as a serverless function
+export default app;

@@ -3,18 +3,13 @@
   "builds": [
     {
       "src": "server.js",
-      "use": "@vercel/node@3.0.4"
+      "use": "@vercel/node"
     },
     {
       "src": "public/**/*",
       "use": "@vercel/static"
     }
   ],
-  "build": {
-    "env": {
-      "NODE_VERSION": "18.x"
-    }
-  },
   "routes": [
     {
       "src": "/api/(.*)",

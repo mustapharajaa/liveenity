@@ -8,10 +8,6 @@
     {
       "src": "public/**/*",
       "use": "@vercel/static"
-    },
-    {
-      "src": "*.{html,css,js,json}",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -31,8 +27,5 @@
       "src": "/(.*)",
       "dest": "/server.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

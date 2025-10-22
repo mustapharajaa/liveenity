@@ -8,9 +8,18 @@
     {
       "src": "public/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "api/scrape/route.py",
+      "use": "@vercel/python"
     }
   ],
   "routes": [
+    {
+      "src": "/api/scrape",
+      "dest": "/api/scrape/route.py",
+      "methods": ["POST"]
+    },
     {
       "src": "/api/(.*)",
       "dest": "/server.js"

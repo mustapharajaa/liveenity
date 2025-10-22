@@ -376,6 +376,11 @@ app.get('/keywords', (req, res) => {
     res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'));
 });
 
+// Redirect root to keywords
+app.get('/', (req, res) => {
+    res.redirect('/keywords');
+});
+
 // Serve sitemap.xml
 app.get('/sitemap.xml', (req, res) => {
     const sitemapPath = path.join(__dirname, 'sitemap.xml');

@@ -35,8 +35,131 @@ app.use(express.static(path.join(__dirname, 'public'), {
     } else {
       res.setHeader('Cache-Control', 'public, max-age=31536000');
     }
-  }
+  },
+  // Allow fallthrough for 404s so we can handle them with our custom 404 page
+  fallthrough: true
 }));
+
+// --- 3. MIDDLEWARE & ROUTES ---
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    // Set proper cache headers for static assets
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  },
+  // Allow fallthrough for 404s so we can handle them with our custom 404 page
+  fallthrough: true
+}));
+
+// Define servePages function
+const servePages = async (req, res, next) => {
+    const filePath = path.join(__dirname, 'public', 'pages.html');
+    
+    // If there's a slug, try to fetch the post from the database
+    if (req.params.slug) {
+        try {
+            // Check if database is initialized
+            if (!db) {
+                console.error('Database not initialized. Check your TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in .env file');
+                throw new Error('Database not initialized');
+            }
+            
+            console.log(`Fetching post with slug: ${req.params.slug}`);
+            // Fetch the blog post with existing columns
+            const result = await db.execute({
+                sql: "SELECT title, content, slug FROM blog_posts WHERE slug = ?",
+                args: [req.params.slug],
+                timeout: 5000
+            });
+            
+            console.log(`Found ${result.rows.length} post(s) with slug: ${req.params.slug}`);
+
+            if (result.rows.length > 0) {
+                const post = result.rows[0];
+                // Read the template file
+                let template = await fs.promises.readFile(filePath, 'utf-8');
+                
+                console.log(`Serving blog post: ${post.title} (${post.slug})`);
+                
+                // Update page title
+                template = template.replace(/<title>[^<]*<\/title>/, `<title>${post.title} - Liveenity<\/title>`);
+                
+                // Update blog post title
+                template = template.replace(/(<h1 class="[^"]*?blog-title[^"]*?">).*?(<\/h1>)/, `$1${post.title}$2`);
+                
+                // Update blog post content
+                template = template.replace(/(<div class="[^"]*?blog-content[^"]*?\s+article-content[^"]*?">\s*<p class="[^"]*?lead[^"]*?\s+text-muted[^"]*?\s+mb-5[^"]*?">).*?(<\/p>)/, 
+                    `$1${post.content}$2`);
+                
+                return res.send(template);
+            } else {
+                // If no post found with the given slug, serve 404 page
+                console.log(`Post with slug '${req.params.slug}' not found`);
+                const notFoundPath = path.join(__dirname, 'public', '404.html');
+                return res.status(404).sendFile(notFoundPath);
+            }
+        } catch (error) {
+            console.error('Error serving page:', error);
+            // Continue to serve the default page if there's an error
+        }
+    }
+    
+    // If no slug or post not found, serve the default page
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            console.error('Error serving pages.html:', err);
+            if (err.code === 'ENOENT') {
+                return res.status(404).send('pages.html not found');
+            }
+            return res.status(500).send('Error loading page');
+        }
+    });
+};
+
+// Serve .html files without the extension
+app.get('/:page', (req, res, next) => {
+    const page = req.params.page;
+    // Skip if the request is for a file with an extension
+    if (path.extname(page)) {
+        return next();
+    }
+    
+    const filePath = path.join(__dirname, 'public', 'pages', `${page}.html`);
+    
+    // Check if the file exists
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            // File doesn't exist, continue to next middleware
+            return next();
+        }
+        // File exists, serve it
+        res.sendFile(filePath, (err) => {
+            if (err) {
+                console.error(`Error serving ${filePath}:`, err);
+                next(err);
+            }
+        });
+    });
+});
+
+// Define routes
+app.get(['/pages', '/pages/:slug'], servePages);
+
+// Handle 404 errors for all other routes
+app.use((req, res) => {
+  const notFoundPath = path.join(__dirname, 'public', '404.html');
+  res.status(404).sendFile(notFoundPath, (err) => {
+    if (err) {
+      // If the 404 page doesn't exist, send a simple 404 message
+      res.status(404).send('404 - Page not found');
+    }
+  });
+});
 
 // Get connection details from environment variables
 const dbUrl = process.env.TURSO_DATABASE_URL;
@@ -128,78 +251,18 @@ app.get('/api/search', async (req, res) => {
 
 
 // --- 5. SPECIFIC ROUTES ---
-const servePages = async (req, res, next) => {
-    const filePath = path.join(__dirname, 'pages.html');
-    
-    // If there's a slug, try to fetch the post from the database
-    if (req.params.slug) {
-        try {
-            // Fetch the blog post with just the required fields
-            const result = await db.execute({
-                sql: "SELECT title, content FROM blog_posts WHERE slug = ?",
-                args: [req.params.slug],
-                timeout: 5000
-            });
 
-            if (result.rows.length > 0) {
-                const post = result.rows[0];
-                
-                // Use current date for all posts
-                const formattedDate = new Date().toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                
-                // Read the template file
-                let template = await fs.promises.readFile(filePath, 'utf-8');
-                
-                // Replace placeholders with actual content
-                template = template
-                    // Update page title
-                    .replace(/<title>[^<]*<\/title>/, `<title>${post.title} - Liveenity</title>`)
-                    // Update main heading
-                    .replace(/<h1 class="display-4 fw-bold mb-3 blog-title">[^<]*<\/h1>/, 
-                            `<h1 class="display-4 fw-bold mb-3 blog-title">${post.title}</h1>`)
-                    // Update post date
-                    .replace(/<span class="post-date">[^<]*<\/span>/, 
-                            `<span class="post-date">${formattedDate}</span>`)
-                    // Update post content
-                    .replace(/<div class="blog-content[\s\S]*?<\/div>/, 
-                            `<div class="blog-content article-content text-start">${post.content}</div>`);
-                
-                return res.send(template);
-            } else {
-                // If no post found, serve 404 page
-                return res.status(404).sendFile(path.join(__dirname, '404.html'), (err) => {
-                    if (err) {
-                        // If 404.html doesn't exist, send a simple 404 message
-                        res.status(404).send('404 - Page not found');
-                    }
-                });
-            }
-        } catch (error) {
-            console.error('Error fetching post:', error);
-            // Continue to serve the default page if there's an error
-        }
-    }
-    
-    // If no slug or post not found, serve the default pages.html
-    res.sendFile(filePath, { 
-        headers: {
-            'Content-Type': 'text/html; charset=UTF-8'
-        },
-        dotfiles: 'deny'
-    }, (err) => {
+// Serve index.html from pages directory at root URL
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, 'public', 'pages', 'index.html');
+    console.log('Serving index file from:', indexPath);
+    res.sendFile(indexPath, (err) => {
         if (err) {
-            console.error('Error serving pages.html:', err);
-            if (err.code === 'ENOENT') {
-                return res.status(404).send('pages.html not found');
-            }
-            return res.status(500).send('Error loading page');
+            console.error('Error serving index.html:', err);
+            res.status(500).send('Error loading the main page');
         }
     });
-};
+});
 
 // Handle both /pages and /pages/:slug with the same handler
 app.get(['/pages', '/pages/:slug'], servePages);

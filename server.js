@@ -373,7 +373,12 @@ app.post('/api/keywords', express.json(), async (req, res) => {
 
 // Serve keywords.html
 app.get('/keywords', (req, res) => {
-    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'));
+    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'), (err) => {
+        if (err) {
+            console.error('Error serving keywords.html:', err);
+            res.status(500).send('Error loading keywords page');
+        }
+    });
 });
 
 // Redirect root to keywords

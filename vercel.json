@@ -8,6 +8,10 @@
     {
       "src": "public/**/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "SCRAP/**/*",
+      "use": "@vercel/static"
     }
   ],
   "build": {

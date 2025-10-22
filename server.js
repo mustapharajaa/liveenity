@@ -60,12 +60,27 @@ if (dbUrl && dbAuthToken) {
 // --- 4. ROUTES ---
 // Serve keywords.html
 app.get('/keywords', (req, res) => {
-    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'), (err) => {
-        if (err) {
-            console.error('Error serving keywords.html:', err);
-            res.status(500).send('Error loading keywords page');
+    // Try both paths to work in both local and Vercel environments
+    const paths = [
+        path.join(__dirname, 'SCRAP', 'keywords.html'),
+        path.join(__dirname, 'keywords.html')
+    ];
+    
+    const sendFileWithFallback = (index = 0) => {
+        if (index >= paths.length) {
+            console.error('Keywords HTML file not found at any path:', paths);
+            return res.status(500).send('Keywords page not found');
         }
-    });
+        
+        res.sendFile(paths[index], (err) => {
+            if (err) {
+                console.error(`Error serving keywords.html from ${paths[index]}:`, err);
+                sendFileWithFallback(index + 1);
+            }
+        });
+    };
+    
+    sendFileWithFallback();
 });
 
 // Redirect root to keywords

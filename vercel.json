@@ -8,22 +8,9 @@
     {
       "src": "public/**/*",
       "use": "@vercel/static"
-    },
-    {
-      "src": "api/scrape/route.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
-      }
     }
   ],
   "routes": [
-    {
-      "src": "/api/scrape",
-      "dest": "/api/scrape/route.py",
-      "methods": ["POST"]
-    },
     {
       "src": "/api/(.*)",
       "dest": "/server.js"

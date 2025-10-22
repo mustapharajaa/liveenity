@@ -86,18 +86,6 @@
     <div class="container">
         <h1>Manage Keywords</h1>
         
-        <!-- Search Section -->
-        <div class="search-section" style="margin-bottom: 30px; padding: 20px; background: #f0f7ff; border-radius: 8px; border: 1px solid #d0e3ff;">
-            <h2 style="margin-top: 0; color: #0056b3;">Search Keywords</h2>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="searchInput" placeholder="Enter search term..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
-                <button id="searchBtn" style="padding: 10px 20px;">Search</button>
-            </div>
-            <div id="searchResults" style="margin-top: 15px; min-height: 50px; border: 1px solid #d0e3ff; border-radius: 4px; padding: 10px; background: white;">
-                <!-- Search results will appear here -->
-            </div>
-        </div>
-        
         <div class="info">
             <p>Enter one keyword per line. These keywords will be used for content generation.</p>
         </div>
@@ -118,78 +106,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Search functionality
-            const searchInput = document.getElementById('searchInput');
-            const searchBtn = document.getElementById('searchBtn');
-            const searchResults = document.getElementById('searchResults');
-            
-            searchBtn.addEventListener('click', performSearch);
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') performSearch();
-            });
-            
-            async function performSearch() {
-                const keyword = searchInput.value.trim();
-                if (!keyword) {
-                    showSearchStatus('Please enter a search term', true);
-                    return;
-                }
-                
-                searchBtn.disabled = true;
-                searchBtn.textContent = 'Searching...';
-                searchResults.innerHTML = '<div style="padding: 10px; color: #666;">Searching for "' + keyword + '"...</div>';
-                
-                try {
-                    const response = await fetch('/api/scrape', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ keyword })
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error('Search failed');
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    
-                    displaySearchResults(data.data, keyword);
-                    
-                } catch (error) {
-                    console.error('Search error:', error);
-                    showSearchStatus('Error: ' + error.message, true);
-                } finally {
-                    searchBtn.disabled = false;
-                    searchBtn.textContent = 'Search';
-                }
-            }
-            
-            function displaySearchResults(data, keyword) {
-                if (!data || !data.organic_results || data.organic_results.length === 0) {
-                    searchResults.innerHTML = '<div style="padding: 10px; color: #666;">No results found for "' + keyword + '"</div>';
-                    return;
-                }
-                
-                let html = '<h3 style="margin-top: 0; color: #0056b3;">Search Results for "' + keyword + '"</h3>';
-                
-                data.organic_results.slice(0, 5).forEach((result, index) => {
-                    html += `
-                    <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
-                        <div style="font-weight: bold; color: #1a0dab; margin-bottom: 3px;">${result.title || 'No title'}</div>
-                        <div style="color: #006621; font-size: 14px; margin-bottom: 3px; word-break: break-all;">${result.link || ''}</div>
-                        <div style="color: #545454; font-size: 14px;">${result.snippet || 'No description available'}</div>
-                    </div>`;
-                });
-                
-                searchResults.innerHTML = html;
-            }
-            
-            function showSearchStatus(message, isError = false) {
-                searchResults.innerHTML = `<div style="padding: 10px; color: ${isError ? '#721c24' : '#155724'}; background: ${isError ? '#f8d7da' : '#d4edda'}; border-radius: 4px;">${message}</div>`;
-            }
             const keywordsTextarea = document.getElementById('keywords');
             const saveBtn = document.getElementById('saveBtn');
             const loadBtn = document.getElementById('loadBtn');

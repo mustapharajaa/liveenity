@@ -1,4 +1,3 @@
-from http.server import BaseHTTPRequestHandler
 import json
 import os
 import sys
@@ -7,71 +6,112 @@ from pathlib import Path
 # Add the project root to the Python path
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
-# Import your existing script
-from SCRAP.keyword_searcher import process_keyword, SERPSearcher
+try:
+    # Try to import your existing script
+    from SCRAP.keyword_searcher import process_keyword, SERPSearcher
+    IMPORT_SUCCESS = True
+except ImportError as e:
+    IMPORT_SUCCESS = False
+    print(f"Failed to import SCRAP.keyword_searcher: {e}", file=sys.stderr)
 
-def handler(request):
-    if request.method != 'POST':
-        return json.dumps({'error': 'Method not allowed'}), 405, {'Content-Type': 'application/json'}
-
+def handler(event, context):
     try:
-        # Parse the request body
-        content_length = int(request.headers.get('Content-Length', 0))
-        body = request.rfile.read(content_length).decode('utf-8')
-        data = json.loads(body)
+        # Parse the request
+        http_method = event.get('httpMethod', '').upper()
+        
+        if http_method != 'POST':
+            return {
+                'statusCode': 405,
+                'body': json.dumps({'error': 'Method not allowed'}),
+                'headers': {'Content-Type': 'application/json'}
+            }
+        
+        # Parse request body
+        body = event.get('body', '{}')
+        if isinstance(body, str):
+            try:
+                data = json.loads(body)
+            except json.JSONDecodeError:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps({'error': 'Invalid JSON'}),
+                    'headers': {'Content-Type': 'application/json'}
+                }
+        else:
+            data = body
         
         keyword = data.get('keyword')
-        
         if not keyword:
-            return json.dumps({'error': 'Keyword is required'}), 400, {'Content-Type': 'application/json'}
-
-        # Initialize searcher with environment variables
-        searcher = SERPSearcher(api_key=os.getenv('SERPAPI_KEY'))
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': 'Keyword is required'}),
+                'headers': {'Content-Type': 'application/json'}
+            }
         
-        # Process the keyword using your existing function
+        # Check if imports were successful
+        if not IMPORT_SUCCESS:
+            return {
+                'statusCode': 500,
+                'body': json.dumps({'error': 'Failed to import required modules'}),
+                'headers': {'Content-Type': 'application/json'}
+            }
+        
+        # Initialize searcher with environment variables
+        serpapi_key = os.getenv('SERPAPI_KEY')
+        if not serpapi_key:
+            return {
+                'statusCode': 500,
+                'body': json.dumps({'error': 'SERPAPI_KEY environment variable not set'}),
+                'headers': {'Content-Type': 'application/json'}
+            }
+            
+        searcher = SERPSearcher(api_key=serpapi_key)
+        
+        # Process the keyword
         result = process_keyword(keyword, searcher)
         
-        # Convert the result to a JSON-serializable format if needed
+        # Convert result to JSON-serializable format
         if hasattr(result, '__dict__'):
             result = result.__dict__
-            
-        return json.dumps({
-            'status': 'success',
-            'data': result
-        }), 200, {'Content-Type': 'application/json'}
-
-    except json.JSONDecodeError:
-        return json.dumps({'error': 'Invalid JSON'}), 400, {'Content-Type': 'application/json'}
-    except Exception as e:
-        return json.dumps({'error': str(e)}), 500, {'Content-Type': 'application/json'}
-
-# This allows the function to work with Vercel's Python runtime
-def lambda_handler(event, context):
-    class Request:
-        def __init__(self, event):
-            self.method = event['httpMethod']
-            self.headers = event.get('headers', {})
-            self.rfile = self
-            self._content = event.get('body', '{}').encode('utf-8')
-            self._content_consumed = False
-            
-        def read(self, size=-1):
-            if self._content_consumed:
-                return b''
-            self._content_consumed = True
-            return self._content
-            
-    request = Request(event)
-    response = handler(request)
-    
-    if len(response) == 3:
-        body, status_code, headers = response
-    else:
-        body, status_code = response
-        headers = {}
         
-    return {
-        'statusCode': status_code,
-        'headers': {**headers, 'Content-Type': 'application/json'},
-        'body': body if isinstance(body, str) else json.dumps(body)
+        return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'status': 'success',
+                'data': result
+            }),
+            'headers': {'Content-Type': 'application/json'}
+        }
+        
+    except Exception as e:
+        import traceback
+        error_details = {
+            'error': str(e),
+            'type': type(e).__name__,
+            'traceback': traceback.format_exc()
+        }
+        print(f"Error in handler: {error_details}", file=sys.stderr)
+        
+        return {
+            'statusCode': 500,
+            'body': json.dumps({
+                'error': 'Internal server error',
+                'details': str(e)
+            }),
+            'headers': {'Content-Type': 'application/json'}
+        }
+
+# For local testing
+if __name__ == "__main__":
+    test_event = {
+        'httpMethod': 'POST',
+        'body': json.dumps({'keyword': 'test'}),
+        'headers': {}
     }
+    
+    # Set up environment for local testing
+    os.environ['SERPAPI_KEY'] = 'your_test_key_here'
+    
+    # Run the handler
+    response = handler(test_event, None)
+    print(json.dumps(response, indent=2))

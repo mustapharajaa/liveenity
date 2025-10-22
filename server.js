@@ -56,6 +56,11 @@ app.use(express.static(path.join(__dirname, 'public'), {
   fallthrough: true
 }));
 
+// Explicit route for keywords.html
+app.get('/keywords', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'keywords.html'));
+});
+
 // Define servePages function
 const servePages = async (req, res, next) => {
     const filePath = path.join(__dirname, 'public', 'pages.html');
@@ -101,7 +106,15 @@ const servePages = async (req, res, next) => {
                 // If no post found with the given slug, serve 404 page
                 console.log(`Post with slug '${req.params.slug}' not found`);
                 const notFoundPath = path.join(__dirname, 'public', '404.html');
-                return res.status(404).sendFile(notFoundPath);
+                
+                // Check if 404.html exists before trying to send it
+                try {
+                    await fsPromises.access(notFoundPath);
+                    return res.status(404).sendFile(notFoundPath);
+                } catch (err) {
+                    console.error('404.html not found at:', notFoundPath);
+                    return res.status(404).send('Page not found');
+                }
             }
         } catch (error) {
             console.error('Error serving page:', error);
@@ -121,9 +134,102 @@ const servePages = async (req, res, next) => {
     });
 };
 
-// Serve .html files without the extension
+// API Endpoints
+app.get('/api/keywords', async (req, res) => {
+    console.log('\n--- /api/keywords GET request received ---');
+    try {
+        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
+        console.log('Looking for keywords at:', keywordsPath);
+        
+        // Check if file exists and is accessible
+        try {
+            await fsPromises.access(keywordsPath, fs.constants.R_OK | fs.constants.W_OK);
+            console.log('File exists and is accessible');
+        } catch (accessError) {
+            console.error('File access error:', accessError);
+            if (accessError.code === 'ENOENT') {
+                console.log('File does not exist, creating...');
+                try {
+                    await fsPromises.mkdir(path.dirname(keywordsPath), { recursive: true });
+                    await fsPromises.writeFile(keywordsPath, '', 'utf-8');
+                    console.log('Created empty KEYWORDS.txt file');
+                } catch (writeError) {
+                    console.error('Error creating file:', writeError);
+                    return res.status(500).json({ 
+                        error: 'Failed to create keywords file',
+                        details: writeError.message 
+                    });
+                }
+            } else {
+                return res.status(500).json({ 
+                    error: 'File access error',
+                    details: accessError.message 
+                });
+            }
+        }
+        
+        // Now read the file
+        let keywords = [];
+        try {
+            const content = await fsPromises.readFile(keywordsPath, 'utf-8');
+            console.log('File content:', JSON.stringify(content));
+            keywords = content.split('\n')
+                .map(k => k.trim())
+                .filter(k => k !== '');
+            console.log(`Loaded ${keywords.length} keywords from KEYWORDS.txt`);
+        } catch (readError) {
+            console.error('Error reading file:', readError);
+            return res.status(500).json({ 
+                error: 'Failed to read keywords file',
+                details: readError.message 
+            });
+        }
+        
+        console.log('Sending response with keywords:', keywords);
+        return res.json({ keywords });
+    } catch (error) {
+        console.error('Error in /api/keywords:', error);
+        res.status(500).json({ 
+            error: 'Failed to load keywords',
+            details: error.message 
+        });
+    }
+});
+
+app.post('/api/keywords', express.json(), async (req, res) => {
+    try {
+        const { keywords } = req.body;
+        
+        if (!Array.isArray(keywords)) {
+            return res.status(400).json({ error: 'Keywords must be an array' });
+        }
+        
+        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
+        console.log('Saving keywords to:', keywordsPath);
+        const content = keywords.join('\n');
+        
+        // Ensure the directory exists
+        await fsPromises.mkdir(path.dirname(keywordsPath), { recursive: true });
+        await fsPromises.writeFile(keywordsPath, content, 'utf-8');
+        
+        console.log(`Saved ${keywords.length} keywords to KEYWORDS.txt`);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error in POST /api/keywords:', error);
+        res.status(500).json({ 
+            error: 'Failed to save keywords',
+            details: error.message 
+        });
+    }
+});
+
+// Serve static files directly
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Handle specific routes
 app.get('/:page', (req, res, next) => {
     const page = req.params.page;
+    
     // Skip if the request is for a file with an extension
     if (path.extname(page)) {
         return next();
@@ -249,6 +355,7 @@ app.get('/api/search', async (req, res) => {
     }
 });
 
+// Moved API endpoints to the top of the route definitions
 
 // --- 5. SPECIFIC ROUTES ---
 
@@ -259,7 +366,7 @@ app.get('/', (req, res) => {
     res.sendFile(indexPath, (err) => {
         if (err) {
             console.error('Error serving index.html:', err);
-            res.status(500).send('Error loading the main page');
+            res.status(500).send('Error loading page');
         }
     });
 });
@@ -267,132 +374,9 @@ app.get('/', (req, res) => {
 // Handle both /pages and /pages/:slug with the same handler
 app.get(['/pages', '/pages/:slug'], servePages);
 
-// Keywords route
-app.get('/keywords', async (req, res) => {
-    try {
-        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
-        let keywords = [];
-        
-        try {
-            const data = await fsPromises.readFile(keywordsPath, 'utf8');
-            keywords = data.split('\n').filter(k => k.trim() !== '');
-        } catch (err) {
-            console.error('Error reading keywords file:', err);
-            // Continue with empty keywords array if file doesn't exist yet
-        }
-        
-        res.send(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Manage Keywords</title>
-                <style>
-                    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-                    h1 { color: #333; }
-                    textarea { width: 100%; height: 200px; margin: 10px 0; padding: 10px; }
-                    button { padding: 8px 16px; background: #0070f3; color: white; border: none; border-radius: 4px; cursor: pointer; }
-                    button:hover { background: #005bb5; }
-                    .container { margin-top: 20px; }
-                </style>
-            </head>
-            <body>
-                <h1>Manage Keywords</h1>
-                <form action="/keywords" method="POST">
-                    <p>Enter one keyword per line:</p>
-                    <textarea name="keywords" placeholder="Enter keywords, one per line">${keywords.join('\n')}</textarea>
-                    <div>
-                        <button type="submit">Save Keywords</button>
-                    </div>
-                </form>
-                <div class="container">
-                    <h3>Current Keywords (${keywords.length}):</h3>
-                    <ul>${keywords.map(k => `<li>${k}</li>`).join('')}</ul>
-                </div>
-            </body>
-            </html>
-        `);
-    } catch (error) {
-        console.error('Error in /keywords route:', error);
-        res.status(500).send('Error loading keywords');
-    }
-});
-
-app.post('/keywords', express.urlencoded({ extended: true }), async (req, res) => {
-    try {
-        const keywords = req.body.keywords;
-        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
-        
-        // Create directory if it doesn't exist
-        await fsPromises.mkdir(path.dirname(keywordsPath), { recursive: true });
-        
-        // Save the keywords
-        await fsPromises.writeFile(keywordsPath, keywords, 'utf8');
-        
-        res.redirect('/keywords?success=1');
-    } catch (error) {
-        console.error('Error saving keywords:', error);
-        res.status(500).send('Error saving keywords');
-    }
-});
-
-// API Endpoints for Keywords
-app.get('/api/keywords', async (req, res) => {
-    try {
-        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
-        let keywords = [];
-        
-        try {
-            const data = await fsPromises.readFile(keywordsPath, 'utf8');
-            keywords = data.split('\n')
-                         .map(k => k.trim())
-                         .filter(k => k !== '');
-        } catch (err) {
-            if (err.code !== 'ENOENT') {
-                console.error('Error reading keywords file:', err);
-                return res.status(500).json({ error: 'Error reading keywords file' });
-            }
-            // If file doesn't exist, return empty array
-        }
-        
-        res.json({ keywords });
-    } catch (error) {
-        console.error('Error in /api/keywords:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-app.post('/api/keywords', express.json(), async (req, res) => {
-    try {
-        const { keywords } = req.body;
-        
-        if (!Array.isArray(keywords)) {
-            return res.status(400).json({ error: 'Keywords must be an array' });
-        }
-        
-        const keywordsPath = path.join(__dirname, 'SCRAP', 'KEYWORDS.txt');
-        const keywordsDir = path.dirname(keywordsPath);
-        
-        // Create directory if it doesn't exist
-        try {
-            await fsPromises.mkdir(keywordsDir, { recursive: true });
-        } catch (err) {
-            console.error('Error creating directory:', err);
-            return res.status(500).json({ error: 'Error creating directory' });
-        }
-        
-        // Save the keywords, one per line
-        await fsPromises.writeFile(keywordsPath, keywords.join('\n'), 'utf8');
-        
-        res.json({ success: true });
-    } catch (error) {
-        console.error('Error saving keywords:', error);
-        res.status(500).json({ error: 'Error saving keywords' });
-    }
-});
-
 // Serve keywords.html
 app.get('/keywords', (req, res) => {
-    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'));
+    res.sendFile(path.join(__dirname, 'public', 'keywords.html'));
 });
 
 // Serve sitemap.xml
@@ -412,7 +396,7 @@ app.get('/sitemap.xml', (req, res) => {
 
 // --- 6. CATCH-ALL ROUTE FOR CLIENT-SIDE ROUTING ---
 app.get('*', (req, res) => {
-    const indexPath = path.join(__dirname, 'index.html');
+    const indexPath = path.join(__dirname, 'public', 'index.html');
     
     // If the file exists, send it
     if (fs.existsSync(indexPath)) {

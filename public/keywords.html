@@ -147,11 +147,14 @@
             
             function loadKeywords() {
                 fetch('/api/keywords')
-                    .then(response => {
+                    .then(async response => {
+                        const data = await response.json();
                         if (!response.ok) {
-                            throw new Error('Failed to load keywords');
+                            const errorMsg = data.error || 'Failed to load keywords';
+                            const details = data.details ? ` (${data.details})` : '';
+                            throw new Error(`${errorMsg}${details}`);
                         }
-                        return response.json();
+                        return data;
                     })
                     .then(data => {
                         keywordsTextarea.value = data.keywords.join('\n');
@@ -160,7 +163,7 @@
                     })
                     .catch(error => {
                         console.error('Error loading keywords:', error);
-                        showStatus('Error loading keywords: ' + error.message, true);
+                        showStatus(error.message || 'Error loading keywords', true);
                     });
             }
             

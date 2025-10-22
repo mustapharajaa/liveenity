@@ -256,6 +256,31 @@ app.get('/:page', (req, res, next) => {
 // Define routes
 app.get(['/pages', '/pages/:slug'], servePages);
 
+// Serve sitemap.xml from root
+app.get('/sitemap.xml', (req, res) => {
+    console.log('Sitemap route accessed');
+    const sitemapPath = path.join(__dirname, 'sitemap.xml');
+    console.log('Looking for sitemap at:', sitemapPath);
+    
+    if (!fs.existsSync(sitemapPath)) {
+        console.error('Sitemap file not found at:', sitemapPath);
+        return res.status(404).send('Sitemap not found');
+    }
+    
+    console.log('Sending sitemap file');
+    res.sendFile(sitemapPath, { 
+        headers: {
+            'Content-Type': 'application/xml',
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
+        }
+    }, (err) => {
+        if (err) {
+            console.error('Error sending sitemap:', err);
+            res.status(500).send('Error loading sitemap');
+        }
+    });
+});
+
 // Handle 404 errors for all other routes
 app.use((req, res) => {
   const notFoundPath = path.join(__dirname, 'public', '404.html');
@@ -367,29 +392,6 @@ app.get('/', (req, res) => {
         if (err) {
             console.error('Error serving index.html:', err);
             res.status(500).send('Error loading page');
-        }
-    });
-});
-
-// Handle both /pages and /pages/:slug with the same handler
-app.get(['/pages', '/pages/:slug'], servePages);
-
-// Serve keywords.html
-app.get('/keywords', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'keywords.html'));
-});
-
-// Serve sitemap.xml
-app.get('/sitemap.xml', (req, res) => {
-    const sitemapPath = path.join(__dirname, 'sitemap.xml');
-    res.sendFile(sitemapPath, { 
-        headers: {
-            'Content-Type': 'application/xml'
-        }
-    }, (err) => {
-        if (err) {
-            console.error('Error serving sitemap.xml:', err);
-            res.status(404).send('Sitemap not found');
         }
     });
 });

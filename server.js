@@ -57,51 +57,7 @@ if (dbUrl && dbAuthToken) {
 // --- 3. MIDDLEWARE ---
 // (CORS and JSON parsing already set up above)
 
-// --- 4. ROUTES ---
-// Serve keywords.html
-app.get('/keywords', (req, res) => {
-    // Try both paths to work in both local and Vercel environments
-    const paths = [
-        path.join(__dirname, 'SCRAP', 'keywords.html'),
-        path.join(__dirname, 'keywords.html')
-    ];
-    
-    const sendFileWithFallback = (index = 0) => {
-        if (index >= paths.length) {
-            console.error('Keywords HTML file not found at any path:', paths);
-            return res.status(500).send('Keywords page not found');
-        }
-        
-        res.sendFile(paths[index], (err) => {
-            if (err) {
-                console.error(`Error serving keywords.html from ${paths[index]}:`, err);
-                sendFileWithFallback(index + 1);
-            }
-        });
-    };
-    
-    sendFileWithFallback();
-});
-
-// Redirect root to keywords
-app.get('/', (req, res) => {
-    res.redirect('/keywords');
-});
-
-// --- 5. STATIC FILES ---
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res, path) => {
-    // Set proper cache headers for static assets
-    if (path.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    } else {
-      res.setHeader('Cache-Control', 'public, max-age=31536000');
-    }
-  }
-}));
-
-// --- 6. API ENDPOINTS ---
+// --- 4. API ENDPOINTS ---
 
 /**
  * GET /api/test
@@ -316,50 +272,6 @@ app.post('/keywords', express.urlencoded({ extended: true }), async (req, res) =
     }
 });
 
-// API to trigger Python script
-app.post('/api/run-keyword-search', express.json(), (req, res) => {
-    const { keyword } = req.body;
-    
-    if (!keyword) {
-        return res.status(400).json({ error: 'Keyword is required' });
-    }
-
-    const { spawn } = require('child_process');
-    const pythonProcess = spawn('python', [
-        path.join(__dirname, 'SCRAP', 'keyword_searcher.py'),
-        '--keyword',
-        keyword
-    ]);
-
-    let output = '';
-    let errorOutput = '';
-
-    pythonProcess.stdout.on('data', (data) => {
-        output += data.toString();
-    });
-
-    pythonProcess.stderr.on('data', (data) => {
-        errorOutput += data.toString();
-    });
-
-    pythonProcess.on('close', (code) => {
-        if (code !== 0) {
-            console.error(`Python script exited with code ${code}`);
-            console.error('Error output:', errorOutput);
-            return res.status(500).json({
-                error: 'Error running script',
-                details: errorOutput
-            });
-        }
-        
-        res.json({
-            success: true,
-            output: output,
-            message: 'Script executed successfully'
-        });
-    });
-});
-
 // API Endpoints for Keywords
 app.get('/api/keywords', async (req, res) => {
     try {
@@ -413,6 +325,11 @@ app.post('/api/keywords', express.json(), async (req, res) => {
         console.error('Error saving keywords:', error);
         res.status(500).json({ error: 'Error saving keywords' });
     }
+});
+
+// Serve keywords.html
+app.get('/keywords', (req, res) => {
+    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'));
 });
 
 // Serve sitemap.xml

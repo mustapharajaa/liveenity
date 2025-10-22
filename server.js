@@ -57,7 +57,36 @@ if (dbUrl && dbAuthToken) {
 // --- 3. MIDDLEWARE ---
 // (CORS and JSON parsing already set up above)
 
-// --- 4. API ENDPOINTS ---
+// --- 4. ROUTES ---
+// Serve keywords.html
+app.get('/keywords', (req, res) => {
+    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'), (err) => {
+        if (err) {
+            console.error('Error serving keywords.html:', err);
+            res.status(500).send('Error loading keywords page');
+        }
+    });
+});
+
+// Redirect root to keywords
+app.get('/', (req, res) => {
+    res.redirect('/keywords');
+});
+
+// --- 5. STATIC FILES ---
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, path) => {
+    // Set proper cache headers for static assets
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  }
+}));
+
+// --- 6. API ENDPOINTS ---
 
 /**
  * GET /api/test
@@ -369,21 +398,6 @@ app.post('/api/keywords', express.json(), async (req, res) => {
         console.error('Error saving keywords:', error);
         res.status(500).json({ error: 'Error saving keywords' });
     }
-});
-
-// Serve keywords.html
-app.get('/keywords', (req, res) => {
-    res.sendFile(path.join(__dirname, 'SCRAP', 'keywords.html'), (err) => {
-        if (err) {
-            console.error('Error serving keywords.html:', err);
-            res.status(500).send('Error loading keywords page');
-        }
-    });
-});
-
-// Redirect root to keywords
-app.get('/', (req, res) => {
-    res.redirect('/keywords');
 });
 
 // Serve sitemap.xml

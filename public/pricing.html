@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="theme-color" content="#0B0F10">
+    <title>Pricing - Liveenity</title>
+    <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px; /* Adjust based on your header height */
+        }
+        
+        :root {
+            --color-bg: #0B0F10;
+            --color-text: #FFFFFF;
+            --color-text-secondary: #A1A1A9;
+            --color-accent: #2CFFA7;
+            --color-border: #232627;
+            --color-purple: #9F85FF;
+            --color-green: #2CFFA7;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        body.mobile-menu-open {
+            overflow: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-accent);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #232627;
+            color: var(--color-text);
+        }
+
+        .announcement-bar {
+            background-color: #161A1B;
+            color: var(--color-text-secondary);
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+        }
+
+        .announcement-bar a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .main-header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            background-color: var(--color-bg);
+            z-index: 1000;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .header-actions .social-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-actions .social-links a {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-actions .btn-login {
+            background-color: var(--color-border);
+            color: var(--color-text);
+        }
+        
+        .header-actions .btn-login:hover {
+            background-color: #333637;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1002;
+        }
+        
+        .mobile-menu-toggle .icon-bar {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: white;
+            margin: 5px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mobile-menu-toggle.active .icon-bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .mobile-menu-toggle.active .icon-bar:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-menu-toggle.active .icon-bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        
+        .hero-section {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-logo {
+            width: 150px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-section h1 {
+            font-size: 72px;
+            font-weight: 700;
+            margin: 0 0 24px;
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        .hero-section p {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-size: 20px;
+            color: var(--color-text-secondary);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .partners-section {
+            padding: 60px 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .partner-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            filter: grayscale(1) brightness(2);
+            opacity: 0.8;
+            transition: all 0.2s ease;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0) brightness(1);
+            opacity: 1;
+        }
+
+        .partner-logo svg {
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .section {
+            padding: 100px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0 0 16px;
+            line-height: 1.2;
+        }
+        .section-header p {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid, .apps-grid, .community-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background-color: var(--color-border);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .apps-grid {
+             grid-template-columns: repeat(3, 1fr);
+        }
+
+        .feature-card, .app-card, .community-card {
+            background-color: var(--color-bg);
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background-color: rgba(44, 255, 167, 0.05);
+        }
+
+        .payment-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(11, 15, 16, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 10;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .feature-card:hover .payment-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .payment-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease 0.1s;
+        }
+
+        .feature-card:hover .payment-buttons {
+            transform: translateY(0);
+        }
+
+        .payment-buttons .btn {
+            width: 200px;
+            text-align: center;
+            padding: 12px 24px;
+        }
+
+        .feature-card-inner, .community-card-inner {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            height: 100%;
+        }
+
+        .card-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            pointer-events: none;
+        }
+
+        .purple-border {
+            border: 1px solid var(--color-purple);
+        }
+
+        .green-border {
+            border: 1px solid var(--color-green);
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .tag-purple {
+            background-color: rgba(159, 133, 255, 0.1);
+            color: var(--color-purple);
+        }
+
+        .tag-green {
+            background-color: rgba(44, 255, 167, 0.1);
+            color: var(--color-green);
+        }
+
+        .card-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 0 0 16px;
+        }
+
+        .card-description {
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .code-block {
+            background-color: #161A1B;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+        
+        .code-block span {
+            color: #A1A1A9;
+        }
+        
+        .code-block strong {
+            color: #fff;
+        }
+
+        .github-stars {
+            background-color: #232627;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .feature-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background-color: var(--color-border);
+            border-top: 1px solid var(--color-border);
+            margin: 0 -40px -40px;
+        }
+
+        .feature-item, .community-item {
+            background-color: var(--color-bg);
+            padding: 24px;
+        }
+        
+        .feature-item-icon {
+            margin-bottom: 16px;
+            color: var(--color-text-secondary);
+        }
+
+        .feature-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+        
+        .feature-item p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .soon-badge {
+            display: inline-block;
+            background-color: #232627;
+            color: var(--color-text-secondary);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+            font-weight: 500;
+            position: relative;
+            top: -1px;
+        }
+        
+        .app-card-icon {
+            margin-bottom: 24px;
+            height: 96px;
+        }
+        
+        .app-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0 0 12px;
+        }
+        
+        .app-card > p {
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .checklist svg {
+            color: var(--color-accent);
+        }
+        
+        .community-card .btn {
+            margin-bottom: 32px;
+        }
+
+        .btn-purple {
+            background-color: var(--color-purple);
+            color: #fff;
+        }
+        .btn-purple:hover {
+            background-color: #B4A0FF;
+            color: #fff;
+        }
+        
+        .community-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background-color: var(--color-border);
+            border-top: 1px solid var(--color-border);
+            margin: 0 -40px -40px;
+        }
+
+        .community-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .community-item h4 svg {
+             color: var(--color-text-secondary);
+        }
+        
+        .community-item p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .main-footer {
+            padding: 80px 0;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr) 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            color: var(--color-accent);
+            margin: 0 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .footer-links a {
+            color: var(--color-text-secondary);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+        
+        .footer-bottom {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-copyright {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-socials a {
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-socials a:hover {
+            color: var(--color-text);
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Pricing-specific styles preserved and adjusted to match index.html's structure */
+        .pricing-section {
+            padding: 80px 0;
+        }
+        .section-header h1 {
+            font-size: 48px; /* Adjusted from 3rem to match index.html h2 style */
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--color-text);
+        }
+        .section-header p {
+            font-size: 18px; /* Adjusted from 1.25rem to match index.html p style */
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .pricing-card {
+            background: #111516;
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .pricing-card.featured {
+            border-color: var(--color-accent);
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-card.featured::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--color-accent);
+            color: #0B0F10;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .card-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-purple {
+            background-color: rgba(159, 133, 255, 0.1);
+            color: var(--color-purple);
+        }
+        /* End Pricing-specific styles */
+
+
+        @media (max-width: 992px) {
+            .nav-links, .header-actions .social-links, .header-actions .btn-login {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .main-nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100%;
+                background-color: #161A1B;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 30px 30px;
+                gap: 0;
+                transition: right 0.3s ease-in-out;
+                z-index: 1001;
+                border-left: 1px solid var(--color-border);
+            }
+            
+            .main-nav.active {
+                right: 0;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 18px;
+                padding: 10px 0;
+            }
+            
+            .header-actions {
+                margin-top: auto;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .header-actions .btn-login, .header-actions .btn {
+                 display: block;
+                 text-align: center;
+            }
+
+            .header-actions .social-links {
+                display: flex;
+                justify-content: center;
+                padding: 20px 0;
+                border-top: 1px solid var(--color-border);
+                margin-top: 20px;
+            }
+            
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            }
+            
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .hero-section h1 {
+                font-size: 48px;
+            }
+            .hero-section p {
+                font-size: 18px;
+            }
+            .partners-grid {
+                 grid-template-columns: repeat(2, 1fr);
+            }
+            .features-grid, .apps-grid, .community-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                 grid-template-columns: 1fr 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-overlay"></div>
+    <header class="announcement-bar">
+        The next evolution of Streaming is here! <a href="#">Read Announcement</a>
+    </header>
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v3l-4-4 4-4v3z" fill="#2CFFA7"/></svg>
+                LIVEENITY
+            </a>
+            
+            <button class="mobile-menu-toggle" aria-controls="main-nav" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <nav class="main-nav" id="main-nav">
+                <div class="nav-links">
+                    <a href="/support">Support</a>
+                    <a href="/pricing">Pricing</a>
+                    <a href="/blog">Blog</a>
+                    <a href="/changelog">Changelog</a>
+                </div>
+                <div class="header-actions">
+                    <div class="social-links">
+                       <a href="#" aria-label="GitHub"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.82-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" fill="currentColor"/></svg></a>
+                       <a href="#" aria-label="Twitter"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z" fill="currentColor"/></svg></a>
+                       <a href="#" aria-label="Discord"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z" fill="currentColor"/></svg></a>
+                    </div>
+                    <a href="#" class="btn btn-login">Login</a>
+                    <a href="#" class="btn btn-primary"> Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="pricing-section">
+        <div class="container">
+            <div class="section-header">
+                <h1>Simple & Transparent Pricing</h1>
+                <p>Start with our free plan and upgrade as your streaming audience grows. No hidden fees, no complicated contracts.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <span class="card-tag tag-purple">Basic</span>
+                    <h2>Free</h2>
+                    <p class="price">$0<span style="font-size: 1rem; color: var(--color-text-secondary); margin-left: 5px;">/month</span></p>
+                    <a href="#" class="btn btn-login" style="width: 100%; margin-bottom: 20px;">Start Free</a>
+                    <ul class="feature-list" style="list-style: none; padding: 0;">
+                        <li style="display: flex; align-items: center; margin-bottom: 10px; color: var(--color-text-secondary);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Up to 5 unique viewers
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px; color: var(--color-text-secondary);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            720p HD streaming
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px; color: var(--color-text-secondary);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Basic chat integration
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px; color: var(--color-text-secondary);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Community support
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <span class="card-tag tag-purple">Pro</span>
+                    <h2>Standard</h2>
+                    <p class="price">$19<span style="font-size: 1rem; color: var(--color-text-secondary); margin-left: 5px;">/month</span></p>
+                    <a href="#" class="btn btn-primary" style="width: 100%; margin-bottom: 20px;">Upgrade Now</a>
+                    <ul class="feature-list" style="list-style: none; padding: 0;">
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Everything in Basic, plus:
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Up to 500 unique viewers
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            1080p Full HD streaming
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Advanced moderation tools
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Email support (48h response)
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="pricing-card">
+                    <span class="card-tag tag-purple">Enterprise</span>
+                    <h2>Custom</h2>
+                    <p class="price">Contact Us</p>
+                    <a href="#" class="btn btn-login" style="width: 100%; margin-bottom: 20px;">Request Quote</a>
+                    <ul class="feature-list" style="list-style: none; padding: 0;">
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Unlimited viewers & streams
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            4K UHD streaming (up to)
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Dedicated infrastructure
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 10px; color: var(--color-accent);"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Account manager & priority support
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Liveenity Cloud</h4>
+                    <ul class="footer-links">
+                        <li><a href="/quickstart">Quickstart</a></li>
+                        <li><a href="/documentation">Documentation</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                        <li><a href="/api-status">API Status</a></li>
+                        <li><a href="/terms">Terms of Use</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <ul class="footer-links" style="padding-top: 42px;">
+                        <li><a href="/features/embedded-replicas">Embedded Replicas</a></li>
+                        <li><a href="/features/lives-branching">Lives Branching</a></li>
+                        <li><a href="/features/backups">Backups & Recovery</a></li>
+                        <li><a href="/api">Platform API</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Liveenity lives</h4>
+                    <ul class="footer-links">
+                        <li><a href="/changelog">Changelog</a></li>
+                        <li><a href="/releases">Releases</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/support">Support</a></li>
+                        <li><a href="/trust">Trust</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v3l-4-4 4-4v3z" fill="#2CFFA7"/></svg>
+                    &copy; Liveenity 2025
+                </div>
+                <div class="footer-socials">
+                    <a href="#" aria-label="RSS"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M48.2 215.8a32 32 0 11-32-32 32.1 32.1 0 0132 32zM32 96a16 16 0 0016 16 104.2 104.2 0 01104 104 16 16 0 0032 0A152.3 152.3 0 0032 96zM32 40a16 16 0 0016 16 160.4 160.4 0 01160 160 16 16 0 0032 0A208.5 208.5 0 0032 40z"/></svg></a>
+                    <a href="#" aria-label="YouTube"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M234.3 69.2c-2.3-8.6-8.9-15.2-17.5-17.5a308.6 308.6 0 00-88.8-4.7 308.6 308.6 0 00-88.8 4.7c-8.6 2.3-15.2 8.9-17.5 17.5a43.2 43.2 0 00-4.7 49.6v18.4a43.2 43.2 0 004.7 49.6c2.3 8.6 8.9 15.2 17.5 17.5a308.6 308.6 0 0088.8 4.7 308.6 308.6 0 0088.8-4.7c8.6-2.3 15.2-8.9 17.5-17.5a43.2 43.2 0 004.7-49.6v-18.4a43.2 43.2 0 00-4.7-49.6zM104 152V96l48 28-48 28z"/></svg></a>
+                    <a href="#" aria-label="Discord"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z"/></svg></a>
+                    <a href="#" aria-label="Twitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M216 24H40a16 16 0 00-16 16v176a16 16 0 0016 16h176a16 16 0 0016-16V40a16 16 0 00-16-16zM96 184H64V96h32zm-16-96a16 16 0 1116-16 16 16 0 01-16 16zm112 96h-32v-48c0-16-4.3-24-16-24s-16 8-16 24v48h-32V96h32v16c4.6-8 12.1-16 28-16s36 12 36 44z"/></svg></a>
+                    <a href="#" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.82-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z"/></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+            const body = document.body;
+
+            function toggleMenu() {
+                const isOpened = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                mobileMenuToggle.setAttribute('aria-expanded', !isOpened);
+                mainNav.classList.toggle('active');
+                mobileMenuOverlay.classList.toggle('active');
+                body.classList.toggle('mobile-menu-open');
+            }
+
+            function closeMenu() {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                mainNav.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                body.classList.remove('mobile-menu-open');
+            }
+
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', toggleMenu);
+            }
+
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', closeMenu);
+            }
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeMenu();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

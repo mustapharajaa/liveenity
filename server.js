@@ -76,6 +76,18 @@ app.get('/support', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'support.html'));
 });
 
+// Explicit route for pricing page
+app.get('/pricing', (req, res) => {
+    const pricingPath = path.join(__dirname, 'public', 'pricing.html');
+    console.log('Serving pricing page from:', pricingPath);
+    res.sendFile(pricingPath, (err) => {
+        if (err) {
+            console.error('Error serving pricing.html:', err);
+            res.status(500).send('Error loading pricing page');
+        }
+    });
+});
+
 // Define servePages function
 const servePages = async (req, res, next) => {
     const filePath = path.join(__dirname, 'public', 'pages.html');
@@ -412,6 +424,21 @@ app.get('/', (req, res) => {
 });
 
 // Blog route handler
+// Pricing page route
+app.get('/pricing', (req, res) => {
+    const pricingPath = path.join(__dirname, 'public', 'pricing.html');
+    console.log('Pricing route accessed. Full URL:', req.originalUrl);
+    console.log('Attempting to serve pricing file from:', pricingPath);
+    
+    // Send the file directly
+    res.sendFile(pricingPath, (err) => {
+        if (err) {
+            console.error('Error serving pricing.html:', err);
+            res.status(500).send('Error loading pricing page');
+        }
+    });
+});
+
 app.get('/blog', (req, res) => {
     const blogPath = path.join(__dirname, 'public', 'blog.html');
     console.log('Blog route accessed. Full URL:', req.originalUrl);

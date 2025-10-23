@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="theme-color" content="#0B0F10">
+    <title>Support - Liveenity</title>
+    <style>
+        :root {
+            --color-bg: #0B0F10;
+            --color-text: #FFFFFF;
+            --color-text-secondary: #A1A1A9;
+            --color-accent: #2CFFA7;
+            --color-border: #232627;
+            --color-purple: #9F85FF;
+            --color-green: #2CFFA7;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        body.mobile-menu-open {
+            overflow: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1280px; /* Updated to match index.html */
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-accent);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #232627;
+            color: var(--color-text);
+        }
+
+        .announcement-bar {
+            background-color: #161A1B;
+            color: var(--color-text-secondary);
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+        }
+
+        .announcement-bar a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .main-header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky; /* Added sticky position from index.html */
+            top: 0;
+            background-color: var(--color-bg);
+            z-index: 1000;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .header-actions .social-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-actions .social-links a {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-actions .btn-login {
+            background-color: var(--color-border);
+            color: var(--color-text);
+        }
+        
+        .header-actions .btn-login:hover {
+            background-color: #333637;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1002;
+        }
+        
+        .mobile-menu-toggle .icon-bar {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: white;
+            margin: 5px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mobile-menu-toggle.active .icon-bar:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+        .mobile-menu-toggle.active .icon-bar:nth-child(2) {
+            opacity: 0;
+        }
+        .mobile-menu-toggle.active .icon-bar:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+        
+        .main-footer {
+            padding: 80px 0;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr) 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            color: var(--color-accent);
+            margin: 0 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .footer-links a {
+            color: var(--color-text-secondary);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+        
+        .footer-bottom {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-copyright {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-socials a {
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-socials a:hover {
+            color: var(--color-text);
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        
+        .soon-badge {
+            display: inline-block;
+            background-color: #232627;
+            color: var(--color-text-secondary);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+            font-weight: 500;
+            position: relative;
+            top: -1px;
+        }
+
+
+        /* --- support.html specific styles (Merged) --- */
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--color-accent);
+            background: transparent;
+            color: var(--color-accent);
+        }
+        
+        /* Support Hero */
+        .support-hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .support-hero h1 {
+            font-size: 48px;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .support-hero p {
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        /* Support Grid */
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 60px 0;
+        }
+
+        .support-card {
+            background: #161A1B;
+            border-radius: 12px;
+            padding: 32px;
+            transition: transform 0.2s;
+            border: 1px solid var(--color-border);
+        }
+
+        .support-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-accent);
+        }
+
+        .support-card h3 {
+            font-size: 20px;
+            margin: 16px 0 12px;
+        }
+
+        .support-card p {
+            color: var(--color-text-secondary);
+            margin-bottom: 20px;
+        }
+
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--color-text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--color-border);
+            padding: 24px 0;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .faq-answer {
+            padding-top: 16px;
+            color: var(--color-text-secondary);
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        /* Contact Form */
+        .contact-section {
+            padding: 80px 0;
+            background: #161A1B;
+            margin-top: 60px;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0B0F10;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text);
+            font-size: 16px;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Media Queries (Merged from both files) */
+        @media (max-width: 992px) {
+            .nav-links, .header-actions .social-links, .header-actions .btn-login {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .main-nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100%;
+                background-color: #161A1B;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 30px 30px;
+                gap: 0;
+                transition: right 0.3s ease-in-out;
+                z-index: 1001;
+                border-left: 1px solid var(--color-border);
+            }
+            
+            .main-nav.active {
+                right: 0;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 18px;
+                padding: 10px 0;
+            }
+            
+            .header-actions {
+                margin-top: auto;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .header-actions .btn-login, .header-actions .btn {
+                 display: block;
+                 text-align: center;
+            }
+
+            .header-actions .social-links {
+                display: flex;
+                justify-content: center;
+                padding: 20px 0;
+                border-top: 1px solid var(--color-border);
+                margin-top: 20px;
+            }
+            
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            }
+            
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .footer-grid {
+                 grid-template-columns: 1fr 1fr;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .support-hero h1 {
+                font-size: 36px;
+            }
+
+            .support-hero p {
+                font-size: 18px;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-overlay"></div>
+    <header class="announcement-bar">
+        The next evolution of Streaming is here! <a href="#">Read Announcement</a>
+    </header>
+    <header class="main-header">
+        <div class="container">
+            <a href="#" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v3l-4-4 4-4v3z" fill="#2CFFA7"/></svg>
+                LIVEENITY
+            </a>
+            
+            <button class="mobile-menu-toggle" aria-controls="main-nav" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <nav class="main-nav" id="main-nav">
+                <div class="nav-links">
+                    <a href="#">Support</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Changelog</a>
+                </div>
+                <div class="header-actions">
+                    <div class="social-links">
+                       <a href="#" aria-label="GitHub"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.82-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" fill="currentColor"/></svg></a>
+                        <a href="#" aria-label="Twitter"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg></a>
+                        <a href="#" aria-label="Discord"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z" fill="currentColor"/></svg></a>
+                    </div>
+                    <a href="#" class="btn btn-login">Login</a>
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="support-hero">
+            <div class="container">
+                <h1>How can we help you today?</h1>
+                <p>Find answers to common questions, get help with your account, or contact our support team.</p>
+                <div class="search-box">
+                    <input type="text" placeholder="Search help articles..." class="form-control" style="max-width: 500px; margin: 0 auto; display: block;">
+                </div>
+            </div>
+        </section>
+        <div class="container">
+            <div class="support-grid">
+                <div class="support-card">
+                    <h3>Getting Started</h3>
+                    <p>New to Liveenity? Learn how to set up your account and start streaming in minutes.</p>
+                    <a href="#" class="btn">View Guide</a>
+                </div>
+                <div class="support-card">
+                    <h3>Billing & Plans</h3>
+                    <p>Questions about your subscription, invoices, and managing your payment methods.</p>
+                    <a href="#" class="btn">Manage Billing</a>
+                </div>
+                <div class="support-card">
+                    <h3>API & Integrations</h3>
+                    <p>Documentation and guides for using our streaming API and connecting third-party services.</p>
+                    <a href="#" class="btn">Read Docs</a>
+                </div>
+            </div>
+        </div>
+        <section class="faq-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Quick answers to the most common inquiries about Liveenity's service and features.</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What makes Liveenity different from other streaming services?
+                            <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            Liveenity focuses on providing the most efficient and cost-effective video delivery solution for developers and businesses. Our platform is optimized for pre-recorded content streamed from various sources like cloud storage and URLs, offering superior performance and low latency.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Is Liveenity suitable for live streaming?
+                            <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            While our core strength is on-demand, pre-recorded video delivery, we offer solutions that can integrate with existing live streaming infrastructure. Please contact our sales team for custom live streaming needs.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I get started with the API?
+                            <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            You can find our full API documentation in the "API & Integrations" section above. Sign up for a free account to receive your API key and start integrating our service immediately.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What are the pricing plans?
+                            <span>+</span>
+                        </div>
+                        <div class="faq-answer">
+                            We offer several flexible pricing tiers, including a generous free plan, pay-as-you-go options, and custom enterprise solutions. You can view a detailed breakdown on our Pricing page linked in the header navigation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="contact-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Still Need Help?</h2>
+                    <p>Can't find the answer you're looking for? Reach out to our dedicated support team.</p>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <a href="#" class="logo" style="margin-bottom: 20px;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 28px; height: 28px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v3l-4-4 4-4v3z" fill="#2CFFA7"/></svg>
+                        LIVEENITY
+                    </a>
+                    <p style="color: var(--color-text-secondary); max-width: 250px; font-size: 16px;">The most efficient way to stream pre-recorded video for apps, from url, cloud storage, and everything in between.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Docs</a></li>
+                        <li><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers <span class="soon-badge" style="margin-left: 5px;">Hiring</span></a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    &copy; <span id="current-year">2023</span> LIVEENITY. All rights reserved.
+                </div>
+                <div class="footer-socials">
+                    <a href="#" aria-label="GitHub"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.82-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" fill="currentColor"/></svg></a>
+                    <a href="#" aria-label="Twitter"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg></a>
+                    <a href="#" aria-label="Discord"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z" fill="currentColor"/></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // --- Scripts from index.html (Mobile Menu, Year, Form Handling) ---
+
+        // Mobile Menu Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.main-nav');
+            const overlay = document.querySelector('.mobile-menu-overlay');
+            const body = document.body;
+
+            function toggleMenu() {
+                navMenu.classList.toggle('active');
+                toggleButton.classList.toggle('active');
+                overlay.classList.toggle('active');
+                body.classList.toggle('mobile-menu-open');
+                toggleButton.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+            }
+
+            if (toggleButton) {
+                toggleButton.addEventListener('click', toggleMenu);
+            }
+            if (overlay) {
+                overlay.addEventListener('click', toggleMenu);
+            }
+        });
+        
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+        
+        // Keydown event listener for form submission
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+                    event.preventDefault();
+                    const form = document.activeElement.closest('form');
+                    if (form) {
+                        const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+                        if (submitButton) {
+                            submitButton.click();
+                        }
+                    }
+                }
+            }
+        });
+
+        // Ensure all forms have proper handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!form.action || form.action === window.location.href) {
+                    e.preventDefault();
+                    console.log('Form submission prevented');
+                }
+            });
+        });
+
+        // --- Scripts from support.html (FAQ Toggle, Contact Form) ---
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isOpen = answer.classList.contains('show');
+                
+                // Close all answers
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.classList.remove('show');
+                    item.previousElementSibling.querySelector('span:last-child').textContent = '+';
+                });
+                
+                // Toggle current answer
+                if (!isOpen) {
+                    answer.classList.add('show');
+                    question.querySelector('span:last-child').textContent = '−';
+                }
+            });
+        });
+
+        // Contact Form submission
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add form submission logic here
+                alert('Thank you for your message! Our team will get back to you soon.');
+                contactForm.reset();
+            });
+        }
+    </script>
+</body>
+</html>

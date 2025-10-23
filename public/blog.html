@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="theme-color" content="#0B0F10">
+    <title>Blog - Liveenity</title>
+    <style>
+        :root {
+            --color-bg: #0B0F10;
+            --color-text: #FFFFFF;
+            --color-text-secondary: #A1A1A9;
+            --color-accent: #2CFFA7;
+            --color-border: #232627;
+            --color-purple: #9F85FF;
+            --color-green: #2CFFA7;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        body.mobile-menu-open {
+            overflow: hidden;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-accent);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--color-accent);
+            background: transparent;
+            color: var(--color-accent);
+        }
+
+        .announcement-bar {
+            background-color: #161A1B;
+            color: var(--color-text-secondary);
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .announcement-bar a {
+            color: var(--color-accent);
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        .announcement-bar a:hover {
+            text-decoration: underline;
+        }
+
+        .main-header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            background-color: var(--color-bg);
+            z-index: 1000;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+        .logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .header-actions .social-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-actions .social-links a {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-actions .btn-login {
+            background-color: var(--color-border);
+            color: var(--color-text);
+        }
+        
+        .header-actions .btn-login:hover {
+            background-color: #333637;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1002;
+        }
+        
+        .mobile-menu-toggle .icon-bar {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: white;
+            margin: 5px 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Blog specific styles */
+        .blog-hero {
+            padding: 100px 0 60px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(11,15,16,1) 0%, rgba(11,15,16,0.8) 100%);
+        }
+
+        .blog-hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff 0%, #A1A1A9 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .blog-hero p {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            padding: 60px 0 100px;
+        }
+
+        .blog-card {
+            background: #161A1B;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--color-border);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: #232627;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .blog-content {
+            padding: 24px;
+        }
+
+        .blog-category {
+            display: inline-block;
+            background: rgba(44, 255, 167, 0.1);
+            color: var(--color-accent);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .blog-card h3 {
+            font-size: 20px;
+            margin: 0 0 12px;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            color: var(--color-text-secondary);
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .blog-date::before {
+            content: '•';
+            margin-right: 8px;
+        }
+
+        .newsletter-section {
+            background: #161A1B;
+            padding: 60px 0;
+            margin: 60px 0;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .newsletter-content h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-content p {
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            background: #0B0F10;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--color-text);
+            font-size: 15px;
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .newsletter-form button {
+            background: var(--color-accent);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 0 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .newsletter-form button:hover {
+            background: #fff;
+        }
+
+        /* Footer */
+        .main-footer {
+            padding: 80px 0 40px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-logo .logo {
+            display: inline-flex;
+        }
+
+        .footer-about {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            color: var(--color-accent);
+            margin: 0 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+        
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-copyright {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-socials a {
+            color: var(--color-text-secondary);
+            transition: color 0.2s;
+        }
+
+        .footer-socials a:hover {
+            color: var(--color-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .nav-links, .header-actions .social-links, .header-actions .btn-login {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .main-nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100%;
+                background-color: #161A1B;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 30px 30px;
+                gap: 0;
+                transition: right 0.3s ease-in-out;
+                z-index: 1001;
+                border-left: 1px solid var(--color-border);
+            }
+            
+            .main-nav.active {
+                right: 0;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                width: 100%;
+                margin-bottom: 30px;
+            }
+
+            .nav-links a {
+                font-size: 18px;
+                padding: 10px 0;
+            }
+            
+            .header-actions {
+                margin-top: auto;
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .header-actions .btn-login, .header-actions .btn {
+                 display: block;
+                 text-align: center;
+            }
+
+            .header-actions .social-links {
+                display: flex;
+                justify-content: center;
+                padding: 20px 0;
+                border-top: 1px solid var(--color-border);
+                margin-top: 20px;
+            }
+            
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            }
+            
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-hero h1 {
+                font-size: 36px;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+                padding: 40px 0 80px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-form button {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .blog-hero {
+                padding: 80px 0 40px;
+            }
+
+            .blog-hero h1 {
+                font-size: 32px;
+            }
+
+            .blog-hero p {
+                font-size: 16px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu-overlay"></div>
+    <header class="announcement-bar">
+        The next evolution of Streaming is here! <a href="#">Read Announcement</a>
+    </header>
+    <header class="main-header">
+        <div class="container">
+            <a href="/" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v3l-4-4 4-4v3z" fill="#2CFFA7"/></svg>
+                LIVEENITY
+            </a>
+            
+            <button class="mobile-menu-toggle" aria-controls="main-nav" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <nav class="main-nav" id="main-nav">
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/support">Support</a>
+                    <a href="#">Pricing</a>
+                    <a href="/blog" class="active">Blog</a>
+                    <a href="#">Changelog</a>
+                </div>
+                <div class="header-actions">
+                    <div class="social-links">
+                       <a href="#" aria-label="GitHub"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.82-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" fill="currentColor"/></svg></a>
+                        <a href="#" aria-label="Twitter"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg></a>
+                        <a href="#" aria-label="Discord"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z" fill="currentColor"/></svg></a>
+                    </div>
+                    <a href="#" class="btn btn-login">Login</a>
+                    <a href="#" class="btn btn-primary">Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="blog-hero">
+            <div class="container">
+                <h1>Liveenity Blog</h1>
+                <p>Latest news, tutorials, and insights about streaming technology, product updates, and industry trends.</p>
+            </div>
+        </section>
+
+        <div class="container">
+            <div class="blog-grid">
+                <!-- Blog Post 1 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        [Featured Image]
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Product Update</span>
+                        <h3>Introducing Our New Streaming API</h3>
+                        <p class="blog-excerpt">Learn about our latest API updates that make it easier than ever to integrate high-quality streaming into your applications.</p>
+                        <div class="blog-meta">
+                            <span>By John Doe</span>
+                            <span class="blog-date">May 15, 2023</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 2 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        [Featured Image]
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Tutorial</span>
+                        <h3>Getting Started with Live Streaming in 5 Minutes</h3>
+                        <p class="blog-excerpt">A step-by-step guide to setting up your first live stream using Liveenity's platform.</p>
+                        <div class="blog-meta">
+                            <span>By Jane Smith</span>
+                            <span class="blog-date">April 28, 2023</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 3 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        [Featured Image]
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Industry</span>
+                        <h3>The Future of Live Streaming: Trends to Watch</h3>
+                        <p class="blog-excerpt">Explore the emerging trends that are shaping the future of live streaming technology.</p>
+                        <div class="blog-meta">
+                            <span>By Alex Johnson</span>
+                            <span class="blog-date">April 10, 2023</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 4 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        [Featured Image]
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Case Study</span>
+                        <h3>How Company X Scaled to 1M+ Viewers</h3>
+                        <p class="blog-excerpt">Discover how one company leveraged Liveenity to handle massive traffic spikes during their product launch.</p>
+                        <div class="blog-meta">
+                            <span>By Sarah Williams</span>
+                            <span class="blog-date">March 22, 2023</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 5 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        [Featured Image]
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Engineering</span>
+                        <h3>Behind the Scenes: Building a Low-Latency Streaming Solution</h3>
+                        <p class="blog-excerpt">An in-depth look at the technology powering our low-latency streaming capabilities.</p>
+                        <div class="blog-meta">
+                            <span>By Michael Chen</span>
+                            <span class="blog-date">March 5, 2023</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Blog Post 6 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        [Featured Image]
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-category">Tutorial</span>
+                        <h3>Optimizing Video Quality for Different Network Conditions</h3>
+                        <p class="blog-excerpt">Best practices for ensuring smooth playback across all devices and connection speeds.</p>
+                        <div class="blog-meta">
+                            <span>By David Kim</span>
+                            <span class="blog-date">February 18, 2023</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <section class="newsletter-section">
+            <div class="container">
+                <div class="newsletter-content">
+                    <h2>Stay Updated</h2>
+                    <p>Subscribe to our newsletter for the latest product updates, tutorials, and industry insights.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column footer-logo">
+                    <a href="/" class="logo">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 28px; height: 28px;">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9h4v2h-4v3l-4-4 4-4v3z" fill="#2CFFA7"/>
+                        </svg>
+                        LIVEENITY
+                    </a>
+                    <p class="footer-about">The most efficient way to stream pre-recorded video for apps, from URL, cloud storage, and everything in between.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Features</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                        <li><a href="/docs">Documentation</a></li>
+                        <li><a href="/changelog">Changelog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/careers">Careers <span class="soon-badge">Hiring</span></a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="/support">Support</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    &copy; <span id="current-year">2023</span> LIVEENITY. All rights reserved.
+                </div>
+                <div class="footer-socials">
+                    <a href="#" aria-label="GitHub"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-1.02-.01-1.82-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" fill="currentColor"/></svg></a>
+                    <a href="#" aria-label="Twitter"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg></a>
+                    <a href="#" aria-label="Discord"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z" fill="currentColor"/></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.main-nav');
+            const overlay = document.querySelector('.mobile-menu-overlay');
+            const body = document.body;
+
+            function toggleMenu() {
+                navMenu.classList.toggle('active');
+                toggleButton.classList.toggle('active');
+                overlay.classList.toggle('active');
+                body.classList.toggle('mobile-menu-open');
+                toggleButton.setAttribute('aria-expanded', navMenu.classList.contains('active'));
+            }
+
+            if (toggleButton) {
+                toggleButton.addEventListener('click', toggleMenu);
+            }
+            if (overlay) {
+                overlay.addEventListener('click', toggleMenu);
+            }
+
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // Handle form submissions
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Add your form submission logic here
+                    console.log('Form submitted');
+                    
+                    // Show success message for newsletter form
+                    if (form.classList.contains('newsletter-form')) {
+                        const email = form.querySelector('input[type="email"]').value;
+                        alert(`Thanks for subscribing with ${email}! You'll hear from us soon.`);
+                        form.reset();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

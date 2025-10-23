@@ -8,6 +8,11 @@
     <meta name="theme-color" content="#0B0F10">
     <title>Liveenity - The next evolution of Streaming</title>
     <style>
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px; /* Adjust based on your header height */
+        }
+        
         :root {
             --color-bg: #0B0F10;
             --color-text: #FFFFFF;
@@ -760,10 +765,10 @@
             
             <nav class="main-nav" id="main-nav">
                 <div class="nav-links">
-                    <a href="#">Support</a>
-                    <a href="#">Pricing</a>
-                    <a href="#">Blog</a>
-                    <a href="#">Changelog</a>
+                    <a href="/support">Support</a>
+                    <a href="/pricing">Pricing</a>
+                    <a href="/blog">Blog</a>
+                    <a href="/changelog">Changelog</a>
                 </div>
                 <div class="header-actions">
                     <div class="social-links">
@@ -772,7 +777,7 @@
                         <a href="#" aria-label="Discord"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.426a18.347 18.347 0 00-4.666-1.478.498.498 0 00-.58.375c-.21.933-.45 2.315-.62 3.23.001-.002-1.84-2.13-1.84-2.13a.498.498 0 00-.458-.088 14.532 14.532 0 00-2.887 0 .498.498 0 00-.458.088s-1.838 2.128-1.84 2.13c-.17-.914-.41-2.296-.62-3.23a.498.498 0 00-.58-.374A18.347 18.347 0 003.683 4.426a.498.498 0 00-.472.532c.325 3.12.83 7.82 2.35 10.428a.498.498 0 00.442.283c1.012.11 2.1.308 3.208.572a.498.498 0 00.435-.138c.677-.557 1.285-1.18 1.812-1.854a.498.498 0 01.636 0c.527.674 1.135 1.297 1.812 1.854a.498.498 0 00.435.138c1.108-.264 2.196-.462 3.208-.572a.498.498 0 00.442.283c1.52-2.608 2.025-7.307 2.35-10.428a.498.498 0 00-.472-.532zm-7.234 8.528c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688zm-5.25 0c-.828 0-1.5-.756-1.5-1.688s.672-1.688 1.5-1.688c.825 0 1.5.756 1.5 1.688s-.675 1.688-1.5 1.688z" fill="currentColor"/></svg></a>
                     </div>
                     <a href="#" class="btn btn-login">Login</a>
-                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <a href="#plans" class="btn btn-primary">Get Started</a>
                 </div>
             </nav>
         </div>
@@ -787,7 +792,7 @@
                 <h1>The next evolution of steaming</h1>
                 <p>Liveenity is the cloud streaming video Delivery for your baddget & needs. The most efficient way to stream pre-recorded for apps, from url, cloud storage, and everything in between.</p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn btn-primary">Get Started</a>
+                    <a href="#plans" class="btn btn-primary">Get Started</a>
                     <a href="#" class="btn btn-secondary">Schedule a Call</a>
                 </div>
             </div>
@@ -827,7 +832,7 @@
         <section class="section">
             <div class="container">
                 <div class="features-grid">
-                     <div class="feature-card">
+                     <div id="plans" class="feature-card">
                         <div class="feature-card-inner">
                             <div>
                                 <span class="card-tag tag-purple">READY <span>FOR STARTERS</span></span>
@@ -843,31 +848,31 @@
                                 
                                 <div class="payment-overlay">
                                     <div class="payment-buttons">
-                                        <a href="#" class="btn btn-secondary">Pay with Crypto</a>
-                                        <a href="#" class="btn btn-primary">Pay with PayPal</a>
+                                        <a href="#" class="btn btn-primary">Pay with Crypto</a>
+                                        <a href="#" class="btn btn-secondary">Pay with PayPal</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="feature-items">
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Vector Search</h4>
-                                    <p>Native similarity search for AI apps and RAG workflows, no extensions required.</p>
+                                    <div class="feature-item-icon">🎥</div>
+                                    <h4>24/7 Live Streaming</h4>
+                                    <p>Continuous live streaming without interruptions, keeping your content always available.</p>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Async Design</h4>
-                                    <p>Modern async primitives such as Linux io_uring to keep your apps responsive.</p>
+                                    <div class="feature-item-icon">🌐</div>
+                                    <h4>Multi-Platform</h4>
+                                    <p>Stream simultaneously to multiple platforms from a single source.</p>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Concurrent Writes</h4>
-                                    <p>soon</p>
+                                    <div class="feature-item-icon">⚡</div>
+                                    <h4>RTMP Support</h4>
+                                    <p>Professional-grade streaming with RTMP protocol support.</p>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Browser + Persistence</h4>
-                                    <p>...</p>
+                                    <div class="feature-item-icon">☁️</div>
+                                    <h4>Cloud Storage</h4>
+                                    <p>Secure and scalable cloud storage for all your streaming needs.</p>
                                 </div>
                             </div>
                         </div>
@@ -883,31 +888,31 @@
                                 
                                 <div class="payment-overlay">
                                     <div class="payment-buttons">
-                                        <a href="#" class="btn btn-secondary">Pay with Crypto</a>
-                                        <a href="#" class="btn btn-primary">Pay with PayPal</a>
+                                        <a href="#" class="btn btn-primary">Pay with Crypto</a>
+                                        <a href="#" class="btn btn-secondary">Pay with PayPal</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="feature-items">
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Vector Search</h4>
-                                    <p>Native similarity search for AI apps and RAG workflows, no extensions required.</p>
+                                    <div class="feature-item-icon">📱</div>
+                                    <h4>Mobile Ready</h4>
+                                    <p>Stream from any device with full mobile compatibility.</p>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Replication & Sync</h4>
-                                    <p>live streaming Cloud.</p>
+                                    <div class="feature-item-icon">🔄</div>
+                                    <h4>Auto-Restart</h4>
+                                    <p>Automatic stream recovery to ensure 24/7 uptime.</p>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Branching</h4>
-                                    <p>...</p>
+                                    <div class="feature-item-icon">📊</div>
+                                    <h4>Stream Health</h4>
+                                    <p>Real-time monitoring and alerts for your live streams.</p>
                                 </div>
                                 <div class="feature-item">
-                                    <div class="feature-item-icon">...</div>
-                                    <h4>Analytics</h4>
-                                    <p>...</p>
+                                    <div class="feature-item-icon">📈</div>
+                                    <h4>Viewer Analytics</h4>
+                                    <p>Track viewer engagement and stream performance metrics.</p>
                                 </div>
                             </div>
                         </div>
@@ -920,30 +925,30 @@
         <section class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Liveenity is the streaming for Modern Applications</h2>
-                    <p>Power your next-generation apps with Liveenity, a live rtmp that scales with your needs.</p>
+                    <h2>Professional Live Streaming Platform</h2>
+                    <p>Power your live streaming with Liveenity, a robust RTMP solution that scales with your audience.</p>
                 </div>
                 <div class="apps-grid">
                     <div class="app-card">
-                        <div class="app-card-icon">...</div>
-                        <h3>AI Agents</h3>
-                        <p>Scale to millions of agents with unlimited lives and built-in vector search for LLMs.</p>
+                        <div class="app-card-icon">🎥</div>
+                        <h3>24/7 Live Streaming</h3>
+                        <p>Maintain continuous live streams with our reliable infrastructure and automatic failover.</p>
                         <ul class="checklist">
-                           <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Local Vector Search</li>
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Zero Network Latency</li>
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>On Device RAG</li>
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Offline Ready</li>
+                           <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Unlimited Duration</li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Low Latency</li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Auto-Restart</li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>24/7 Uptime</li>
                         </ul>
                     </div>
                      <div class="app-card">
-                         <div class="app-card-icon">...</div>
-                        <h3>Mobile & IoT</h3>
-                        <p>Write offline, sync later. Build on-device local-first apps without network connectivity.</p>
+                         <div class="app-card-icon">📱</div>
+                        <h3>Mobile Streaming</h3>
+                        <p>Stream live from any device with our mobile-optimized streaming solutions.</p>
                         <ul class="checklist">
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>SDKs for Mobile</li>
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Conflict Resolution <span class="soon-badge">SOON</span></li>
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Offline First</li>
-                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>WASM & OPFS</li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Mobile App</li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Adaptive Bitrate <span class="soon-badge">SOON</span></li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Mobile-Optimized</li>
+                            <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-2 15l-5-5 1.41-1.41L8 12.17l7.59-7.59L17 6l-9 9z" fill="currentColor"/></svg>Cross-Platform</li>
                         </ul>
                     </div>
                      <div class="app-card">
@@ -971,16 +976,16 @@
                     <div class="community-card">
                          <div class="community-card-inner">
                             <div>
-                                <span class="card-tag tag-purple">OPEN SOURCE</span>
+                                <span class="card-tag tag-purple">MOBILE APP</span>
                                 <h3 class="card-title">Contribute</h3>
-                                <p class="card-description">Fork the repository, contribute to the codebase, report issues, and join hundreds of others to help build the future of Streaming.</p>
-                                <a href="#" class="btn btn-purple">Fork Repository</a>
+                                <p class="card-description">Join our mobile app development, report issues, and help shape the future of mobile live streaming with Liveenity.</p>
+                                <a href="#" class="btn btn-purple">Join Beta</a>
                             </div>
                             <div class="community-items">
-                                <div class="community-item"><h4>... Contribute Code</h4><p>Submit pull requests and improve Liveenity for everyone.</p></div>
-                                <div class="community-item"><h4>... Report Issues</h4><p>Help us identify and fix bugs to make Liveenity more reliable.</p></div>
-                                <div class="community-item"><h4>... Documentation</h4><p>Improve docs, write tutorials, and help others learn.</p></div>
-                                <div class="community-item"><h4>... Show Support</h4><p>Star the repository and help spread the word about Liveenity.</p></div>
+                                <div class="community-item"><h4>... Mobile Development</h4><p>Help build and improve our iOS and Android streaming apps.</p></div>
+                                <div class="community-item"><h4>... Test & Report</h4><p>Test the mobile app and report any issues you encounter.</p></div>
+                                <div class="community-item"><h4>... Feature Requests</h4><p>Suggest and vote on new mobile features.</p></div>
+                                <div class="community-item"><h4>... Community Support</h4><p>Help other users and share streaming tips.</p></div>
                             </div>
                         </div>
                         <div class="card-border purple-border"></div>
@@ -1012,37 +1017,37 @@
                 <div class="footer-column">
                     <h4>Liveenity Cloud</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Quickstart</a></li>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Pricing</a></li>
-                        <li><a href="#">API Status</a></li>
-                        <li><a href="#">Terms of Use</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="/quickstart">Quickstart</a></li>
+                        <li><a href="/documentation">Documentation</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                        <li><a href="/api-status">API Status</a></li>
+                        <li><a href="/terms">Terms of Use</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
                     </ul>
                 </div>
                  <div class="footer-column">
                     <ul class="footer-links" style="padding-top: 42px;">
-                        <li><a href="#">Embedded Replicas</a></li>
-                        <li><a href="#">lives Branching</a></li>
-                        <li><a href="#">Backups & Recovery</a></li>
-                        <li><a href="#">Platform API</a></li>
+                        <li><a href="/features/embedded-replicas">Embedded Replicas</a></li>
+                        <li><a href="/features/lives-branching">Lives Branching</a></li>
+                        <li><a href="/features/backups">Backups & Recovery</a></li>
+                        <li><a href="/api">Platform API</a></li>
                     </ul>
                 </div>
                  <div class="footer-column">
                     <h4>Liveenity lives</h4>
                     <ul class="footer-links">
-                        <li><a href="#">Changelog</a></li>
-                        <li><a href="#">Releases</a></li>
+                        <li><a href="/changelog">Changelog</a></li>
+                        <li><a href="/releases">Releases</a></li>
                     </ul>
                 </div>
                  <div class="footer-column">
                     <h4>Company</h4>
                     <ul class="footer-links">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Trust</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/support">Support</a></li>
+                        <li><a href="/trust">Trust</a></li>
+                        <li><a href="/blog">Blog</a></li>
                     </ul>
                 </div>
             </div>

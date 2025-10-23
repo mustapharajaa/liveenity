@@ -26,21 +26,31 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public'), {
-  setHeaders: (res, path) => {
-    // Set proper cache headers for static assets
-    if (path.endsWith('.html')) {
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    } else {
-      res.setHeader('Cache-Control', 'public, max-age=31536000');
+// Middleware to redirect .html URLs to clean URLs
+app.use((req, res, next) => {
+    // Check if the URL ends with .html
+    if (req.url.endsWith('.html')) {
+        // Remove .html and any query parameters
+        const cleanUrl = req.url.replace(/\.html$/, '').split('?')[0];
+        console.log(`Redirecting ${req.url} to ${cleanUrl}`);
+        return res.redirect(301, cleanUrl);
     }
-  },
-  // Allow fallthrough for 404s so we can handle them with our custom 404 page
-  fallthrough: true
-}));
+    next();
+});
 
 // --- 3. MIDDLEWARE & ROUTES ---
+
+// Blog route - must come before static file serving
+app.get('/blog', (req, res) => {
+    const blogPath = path.join(__dirname, 'public', 'blog.html');
+    console.log('Serving blog page from:', blogPath);
+    res.sendFile(blogPath, (err) => {
+        if (err) {
+            console.error('Error serving blog.html:', err);
+            res.status(404).send('Blog page not found');
+        }
+    });
+});
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -59,6 +69,11 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // Explicit route for keywords.html
 app.get('/keywords', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'keywords.html'));
+});
+
+// Explicit route for support page
+app.get('/support', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'support.html'));
 });
 
 // Define servePages function
@@ -394,6 +409,67 @@ app.get('/', (req, res) => {
             res.status(500).send('Error loading page');
         }
     });
+});
+
+// Blog route handler
+app.get('/blog', (req, res) => {
+    const blogPath = path.join(__dirname, 'public', 'blog.html');
+    console.log('Blog route accessed. Full URL:', req.originalUrl);
+    console.log('Attempting to serve blog file from:', blogPath);
+    
+    // First check if file exists
+    fs.access(blogPath, fs.constants.F_OK, (err) => {
+        if (err) {
+            console.error('Blog file not found at path:', blogPath);
+            console.error('Current working directory:', process.cwd());
+            console.error('Directory contents:', fs.readdirSync(path.join(__dirname, 'public')));
+            return res.status(404).send('Blog file not found');
+        }
+        
+        // File exists, send it
+        console.log('Sending blog file');
+        res.sendFile(blogPath, (err) => {
+            if (err) {
+                console.error('Error sending blog.html:', err);
+                res.status(500).send('Error loading blog page');
+            } else {
+                console.log('Blog page sent successfully');
+            }
+        });
+    });
+});
+
+// Explicit route for keywords.html
+app.get('/keywords', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'keywords.html'), (err) => {
+        if (err) {
+            console.error('Error serving keywords.html:', err);
+            res.status(404).send('Page not found');
+        }
+    });
+});
+
+// Route for /blog
+app.get('/blog', (req, res) => {
+    console.log('Blog route accessed:', req.originalUrl);
+    const blogPath = path.join(__dirname, 'public', 'blog.html');
+    console.log('Looking for blog file at:', blogPath);
+    
+    // Check if file exists first
+    if (fs.existsSync(blogPath)) {
+        console.log('Blog file found, sending...');
+        return res.sendFile(blogPath, (err) => {
+            if (err) {
+                console.error('Error sending blog.html:', err);
+                return res.status(500).send('Error loading blog page');
+            }
+            console.log('Blog page sent successfully');
+        });
+    } else {
+        console.error('Blog file not found at:', blogPath);
+        console.log('Current directory contents:', fs.readdirSync(path.join(__dirname, 'public')));
+        return res.status(404).send('Blog page not found');
+    }
 });
 
 // --- 6. CATCH-ALL ROUTE FOR CLIENT-SIDE ROUTING ---

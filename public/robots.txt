@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap location (uncomment and update when you have a sitemap)
+# Sitemap: https://liveenity.com/sitemap.xml
+
+# Disallow specific paths (example)
+# Disallow: /private/
+# Disallow: /admin/
+
+# Allow all other paths
+Disallow: 
+
+# Crawl-delay: 10  # Uncomment and adjust if needed to limit crawl rate

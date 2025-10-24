@@ -88,6 +88,18 @@ app.get('/pricing', (req, res) => {
     });
 });
 
+// Explicit route for login page
+app.get('/login', (req, res) => {
+    const loginPath = path.join(__dirname, 'public', 'login.html');
+    console.log('Serving login page from:', loginPath);
+    res.sendFile(loginPath, (err) => {
+        if (err) {
+            console.error('Error serving login.html:', err);
+            res.status(500).send('Error loading login page');
+        }
+    });
+});
+
 // Define servePages function
 const servePages = async (req, res, next) => {
     const filePath = path.join(__dirname, 'public', 'pages.html');
